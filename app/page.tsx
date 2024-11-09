@@ -1,101 +1,147 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import React, { useState } from 'react'
+import { BiUserPin } from 'react-icons/bi'
+import { BiFolder } from 'react-icons/bi'
+import { MdArrowDropDown } from 'react-icons/md'
+
+export default function AdminDashboard() {
+  const [activeTab, setActiveTab] = useState('users')
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white shadow-md">
+        <div className="p-4">
+          <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+        </div>
+        <nav className="mt-6">
+          <button
+            className={`flex w-full items-center px-4 py-2 text-left ${
+              activeTab === 'users' ? 'bg-gray-100' : ''
+            }`}
+            onClick={() => setActiveTab('users')}
+          >
+            <BiUserPin className="mr-2 h-5 w-5" />
+            Users
+          </button>
+          <button
+            className={`flex w-full items-center px-4 py-2 text-left ${
+              activeTab === 'files' ? 'bg-gray-100' : ''
+            }`}
+            onClick={() => setActiveTab('files')}
+          >
+            <BiFolder className="mr-2 h-5 w-5" />
+            Files
+          </button>
+          <button className="flex w-full items-center px-4 py-2 text-left">
+            <BiFolder className="mr-2 h-5 w-5" />
+            Settings
+          </button>
+        </nav>
+      </aside>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto p-8">
+        <div className="mb-8 flex items-center justify-between">
+          <h2 className="text-3xl font-bold text-gray-800">
+            {activeTab === 'users' ? 'Manage Users' : 'Manage Files'}
+          </h2>
+          <div className="relative">
+            <button
+              className="flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              Admin Actions
+              <MdArrowDropDown className="ml-2 h-5 w-5" />
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Dashboard</a>
+                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Settings</a>
+                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Log out</a>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="rounded-lg bg-white p-6 shadow-md">
+          {activeTab === 'users' ? (
+            <div>
+              <h3 className="mb-4 text-xl font-semibold">Users</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Email</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Role</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    <tr>
+                      <td className="whitespace-nowrap px-6 py-4">John Doe</td>
+                      <td className="whitespace-nowrap px-6 py-4">john@example.com</td>
+                      <td className="whitespace-nowrap px-6 py-4">Admin</td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">Edit</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="whitespace-nowrap px-6 py-4">Jane Smith</td>
+                      <td className="whitespace-nowrap px-6 py-4">jane@example.com</td>
+                      <td className="whitespace-nowrap px-6 py-4">User</td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">Edit</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <button className="mt-4 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700">Add New User</button>
+            </div>
+          ) : (
+            <div>
+              <h3 className="mb-4 text-xl font-semibold">Files</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">File Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Size</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Uploaded By</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    <tr>
+                      <td className="whitespace-nowrap px-6 py-4">document.pdf</td>
+                      <td className="whitespace-nowrap px-6 py-4">2.5 MB</td>
+                      <td className="whitespace-nowrap px-6 py-4">John Doe</td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">Download</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="whitespace-nowrap px-6 py-4">image.jpg</td>
+                      <td className="whitespace-nowrap px-6 py-4">1.2 MB</td>
+                      <td className="whitespace-nowrap px-6 py-4">Jane Smith</td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">Download</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <button className="mt-4 rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700">Upload New File</button>
+            </div>
+          )}
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
-  );
+  )
 }
